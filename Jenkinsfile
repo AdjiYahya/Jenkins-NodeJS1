@@ -1,39 +1,28 @@
 pipeline {
-    agent { 
-        node {
-            label 'docker-agent-python'
-            }
+  agent any
+    
+  tools {nodejs "node"}
+    
+  stages {
+        
+    stage('Git') {
+      steps {
+        git 'https://github.com/AdjiYahya/Jenkins-NodeJS1'
       }
-    triggers {
-        pollSCM '* * * * *'
     }
-    stages {
-        stage('Build') {
-            steps {
-                echo "Building.."
-                sh '''
-                cd python_project
-                pip install -r requirements.txt
-                '''
-            }
-        }
-        stage('Test') {
-            steps {
-                echo "Testing.."
-                sh '''
-                cd python_project
-                python3 hello.py
-                python3 hello.py --name=adji
-                '''
-            }
-        }
-        stage('Deliver') {
-            steps {
-                echo 'Deliver....'
-                sh '''
-                echo "doing delivery stuff.."
-                '''
-            }
-        }
+     
+    stage('Build') {
+      steps {
+        sh 'npm install'
+         sh '<<Build Command>>'
+      }
+    }  
+    
+            
+    stage('Test') {
+      steps {
+        sh 'node test'
+      }
     }
+  }
 }
